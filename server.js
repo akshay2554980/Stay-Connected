@@ -4,6 +4,15 @@ const server = require('http').Server(app)
 //server which is  used with socket io. and for that u need express server
 const io=require('socket.io')(server);
 const {v4:uuidv4}=require('uuid')
+const cors = require('cors')
+app.use(cors());
+const {ExpressPeerServer}=require('peer');
+const peerServer = ExpressPeerServer(server,{
+    debug:true
+})
+app.use('/peerjs',peerServer);
+
+
 app.set('view engine','ejs');
 app.use(express.static('public'));
 
@@ -32,9 +41,7 @@ io.on('connection',(socket)=>{
     
 })
 
-server.listen(3000,()=>{
-    console.log("server is active on port 3000");
-});
+server.listen(process.env.PORT || 3000);
 
 
 
